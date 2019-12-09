@@ -1,5 +1,6 @@
 #include "kernel.h"
 #include "standart.h"
+#include "terminal.h"
 
 #define ENTER_KEY_CODE 0x1C
 #define UP 0x48
@@ -13,14 +14,9 @@ extern void shutdown(void);
 
 char *vid = (char*)0xb8000;
 
-unsigned char status = 0;
 unsigned char button = 0; /* 0 - OK, 1 - Cancel */
 unsigned char border_color = 0x70;
 unsigned char theme_color = 0x17;
-
-unsigned char pgm_get_status() {
-	return status;
-}
 
 void pgm_clear_screen(void)
 {
@@ -120,10 +116,9 @@ void menu_close(void) {
 
 void pgm_exit() {
 	prompt_status = 0;
-	status = 0;
 	button = 0;
 	menu_close();
-	clear_screen();
+	terminal();
 }
 
 void pgm_paint_window(int x1, int y1, int x2, int y2, char name[]) {
@@ -155,7 +150,7 @@ void pgm_paint_window(int x1, int y1, int x2, int y2, char name[]) {
 	kprint_to(x1+1, y1, name, border_color);
 }
 
-// Добавить сохранение экрана если меню перекрывает его
+// Добавить сохранение экрана, если меню перекрывает его
 unsigned char calc_status = 0;
 unsigned char calc_loc = 17;
 int f = 0;
@@ -239,7 +234,7 @@ void pgm_settings() {
 	kprint_to(17, 13, "There are nothing", 0x70);
 }
 
-void pgm_keyboard_handler(unsigned char key) {
+void pgm_keyboard_handler(char key) {
 	
 	if (prompt_status) {
 		if (key == ENTER_KEY_CODE && button == 0) {
@@ -273,7 +268,7 @@ void pgm_keyboard_handler(unsigned char key) {
 		return;
 	}
 	
-	// if change app, = 0 to all vars
+	// если поменялось приложение, то следует обнулить все переменные
 	if (menu_status) {
 		if (key == ENTER_KEY_CODE) {
 			switch (menu_choice) {
@@ -286,7 +281,7 @@ void pgm_keyboard_handler(unsigned char key) {
 		} else if (key == UP && menu_choice > 0) {
 			menu_choice--;
 			menu_update();
-		} else if (key == DOWN && menu_choice < 3 /*max*/) {
+		} else if (key == DOWN && menu_choice < 3 /* максимум */) {
 			menu_choice++;
 			menu_update();
 		}
@@ -438,5 +433,5 @@ void pgm(void) { // pseudo-graphical mode
 	
 	pgm_clear_screen();
 	prompt("Do you want to start pgm?");
-	status = 1;
+	set_keyboard_handler(pgm_keyboard_handler);
 }

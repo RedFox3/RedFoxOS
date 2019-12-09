@@ -1,60 +1,6 @@
 #include "standart.h"
 #include "kernel.h"
 
-void say(char input[]) {
-	int i = 4;
-	while (input[i] != '\0') {
-		kprint_symbol(input[i]);
-		i++;
-	}
-}
-
-void help(void) {
-	kprint("help - show this information");
-	kprint_newline();
-	kprint("say - print something");
-	kprint_newline();
-	kprint("shutdown or exit - shutdown pc");
-	kprint_newline();
-	kprint("calc - calculate something");
-	kprint_newline();
-	kprint("clear - clean screen");
-	kprint_newline();
-	kprint("pgm - launch pseudo-graphic mode");
-	kprint_newline();
-	kprint("ru - test russian language");
-}
-
-void print_int(int a) {
-	if (a < 0) {
-		kprint_symbol('-');
-		a *= -1;
-	}
-	
-	if (a < 10) {
-		kprint_symbol(a + '0');
-		return;
-	}
-	
-	int desyatok = -1;
-	int t = a;
-	while (t > 9) {
-		t /= 10;
-		desyatok++;
-	}
-	
-	int sqrt = 10;
-	for (int i = 0; i < desyatok; i++)
-		sqrt *= 10;
-	
-	while (sqrt > 1) {
-		kprint_symbol( ((a / sqrt) % 10) + '0' );
-		sqrt /= 10;
-	}
-	
-	kprint_symbol( (a % 10) + '0');
-}
-
 int atoi(char a[]) {
 	int res = 0;
 	
@@ -115,7 +61,7 @@ char* itoa(int a) {
 
 unsigned char compare(char f[], char s[]) {
 	int i = 0;
-	while (s[i] != '\0') {
+	while (f[i] != '\0' && s[i] != '\0') {
 		if (f[i] != s[i])
 			return 0;
 		i++;
@@ -123,9 +69,7 @@ unsigned char compare(char f[], char s[]) {
 	return 1;
 }
 
-void calc(char exp[]) {
-	kprint("Calc v0.1");
-	kprint_newline();
+int calc(char exp[]) {
 	typedef unsigned char byte;
 	
 	char sym = exp[5];
@@ -145,7 +89,7 @@ void calc(char exp[]) {
 				case '-': flag = 0x02; break;
 				case '*': flag = 0x04; break;
 				case '/': flag = 0x08; break;
-				default: kprint("Error: unresolved symbol"); return;
+				default: return 0; // здесь должно быть оповещение об ошибке
 			}
 		}
 		else if (status & 0x04)
@@ -167,5 +111,5 @@ void calc(char exp[]) {
 		case 0x04: a = f * s; break;
 		case 0x08: a = f / s; break;
 	}
-	print_int(a);
+	return a;	
 }

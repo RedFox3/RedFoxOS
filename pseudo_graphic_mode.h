@@ -3,7 +3,7 @@
 
 unsigned char pgm_get_status();
 void prompt(char[]);
-void pgm_keyboard_handler(unsigned char);
+void pgm_key_hand(unsigned char);
 void pgm(void);
 
 #endif

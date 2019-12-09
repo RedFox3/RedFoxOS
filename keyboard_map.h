@@ -4,7 +4,7 @@ unsigned char keyboard_map[128] =
   '9', '0', '-', '=', '\b',	/* Backspace */
   '\t',			/* Tab */
   'q', 'w', 'e', 'r',	/* 19 */
-  't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',	/* Enter key */
+  't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',	/* Enter */
     0,			/* 29   - Control */
   'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';',	/* 39 */
  '\'', '`',   0,		/* Left shift */
@@ -35,5 +35,5 @@ unsigned char keyboard_map[128] =
     0,   0,   0,
     0,	/* F11 Key */
     0,	/* F12 Key */
-    0,	/* All other keys are undefined */
+    0,	/* Все остальные клавиши не определены */
 };
