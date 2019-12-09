@@ -8,6 +8,7 @@
 Для эмуляции ОС в qemu напиши "qemu-system-i386 -kernel kernel" в терминале
 
 ================================================================================
+
 This is just simple operating system for understanding how it all works.
 
 Requre Linux, ld, gcc, nasm, make
